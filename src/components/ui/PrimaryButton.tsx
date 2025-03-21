@@ -8,13 +8,13 @@ interface Props {
 
 export default function PrimaryButton({ children, onPress }: Props) {
   return (
-    <View style={styles.container}>
+    <View style={styles.buttonOuterContainer}>
       <Pressable
         onPress={onPress}
         style={(varStyle) =>
           varStyle.pressed
-            ? [styles.buttonContainer, styles.buttonContainerPressedIOS]
-            : styles.buttonContainer
+            ? [styles.buttonInnerContainer, styles.buttonContainerPressedIOS]
+            : styles.buttonInnerContainer
         }
       >
         <Text style={styles.buttonText}>{children}</Text>
@@ -24,15 +24,16 @@ export default function PrimaryButton({ children, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  buttonOuterContainer: {
     borderRadius: 28,
     margin: 4,
     overflow: "hidden",
   },
-  buttonContainer: {
+  buttonInnerContainer: {
     backgroundColor: Colors.primary500,
     paddingVertical: 8,
     paddingHorizontal: 16,
+    elevation: 2,
   },
   buttonContainerPressedIOS: {
     opacity: 0.5,

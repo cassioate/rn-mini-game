@@ -11,12 +11,13 @@ export default function Title({ children }: Props) {
 
 const styles = StyleSheet.create({
   title: {
+    fontFamily: "open-sans-bold",
     fontSize: 24,
-    fontWeight: "bold",
-    color: Colors.white,
+    // fontWeight: 'bold',
+    color: "white",
     textAlign: "center",
     borderWidth: 2,
-    borderColor: Colors.white,
+    borderColor: "white",
     padding: 12,
   },
 });

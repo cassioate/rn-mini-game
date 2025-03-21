@@ -1,13 +1,15 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
 import { useEffect, useState } from "react";
 import NumberContainer from "../components/game/NumberContainer";
+import Card from "../components/ui/Card";
+import InstructionText from "../components/ui/InstructionText";
+import GuessLogItem from "../components/game/GuessLogItem";
 
 interface Props {
-  children?: string;
   userNumber: number;
-  setGameIsOver: (game: boolean) => void;
+  gameOverHandler: (numberOfRounds: number) => void;
 }
 
 function generateRandomBetween(min: number, max: number, exclude: number) {
@@ -24,27 +26,24 @@ function generateRandomBetween(min: number, max: number, exclude: number) {
 let minBoundary = 1;
 let maxBoundary = 100;
 
-export default function GameScreen({
-  children,
-  userNumber,
-  setGameIsOver,
-}: Props) {
+export default function GameScreen({ userNumber, gameOverHandler }: Props) {
   // Essa seria uma fora de usar useState para controlar os limites, mas isso causaria mais renderizações na tela toda vez que eles fossem alterados
   // const [minBoundary, setMinBoundary] = useState(1);
   // const [maxBoundary, setMaxBoundary] = useState(100);
 
-  const initialGuesse = generateRandomBetween(
+  const initialGuess = generateRandomBetween(
     minBoundary,
     maxBoundary,
     userNumber
   );
-  const [currentGuesse, setCurrentGuesse] = useState<number>(initialGuesse);
+  const [currentGuesse, setCurrentGuesse] = useState<number>(initialGuess);
+  const [guessRounds, setGuessRounds] = useState([initialGuess]);
 
   useEffect(() => {
     if (userNumber === currentGuesse) {
       minBoundary = 1;
       maxBoundary = 100;
-      setGameIsOver(true);
+      gameOverHandler(guessRounds.length);
     }
   }, [currentGuesse]);
 
@@ -77,25 +76,65 @@ export default function GameScreen({
       currentGuesse
     );
     setCurrentGuesse(newRandom);
+    setGuessRounds((prevGuessRounds) => [newRandom, ...prevGuessRounds]);
   }
 
+  const guessRoundsListLength = guessRounds.length;
+
   return (
-    <View style={styles.screenContainer}>
+    <View style={styles.screen}>
       <Title> Opponent's guess </Title>
       <NumberContainer>{currentGuesse}</NumberContainer>
-      <PrimaryButton onPress={() => nextGuesseHandler("lower")}>
-        -
-      </PrimaryButton>
-      <PrimaryButton onPress={() => nextGuesseHandler("greater")}>
-        +
-      </PrimaryButton>
+      <Card>
+        <InstructionText style={styles.instructionText}>
+          Higher or lower?
+        </InstructionText>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuesseHandler("lower")}>
+              -
+            </PrimaryButton>
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuesseHandler("greater")}>
+              +
+            </PrimaryButton>
+          </View>
+        </View>
+      </Card>
+      <View style={styles.listContainer}>
+        {/* {guessRounds.map(guessRound => <Text key={guessRound}>{guessRound}</Text>)} */}
+        <FlatList
+          data={guessRounds}
+          renderItem={(itemData) => (
+            <GuessLogItem
+              roundNumber={guessRoundsListLength - itemData.index}
+              guess={itemData.item}
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screenContainer: {
+  screen: {
     flex: 1,
-    padding: 12,
+    padding: 24,
+    marginTop: 50,
+  },
+  instructionText: {
+    marginBottom: 12,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+    padding: 16,
   },
 });
