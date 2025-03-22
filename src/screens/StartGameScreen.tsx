@@ -1,5 +1,7 @@
 import {
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -51,33 +53,40 @@ export default function StartGameScreen({ pickedNumberHandler }: Props) {
   ];
 
   return (
-    <View style={rootContainerStyle}>
-      <Title>Guess My Number</Title>
-      <Card>
-        <InstructionText>Enter a number</InstructionText>
-        <TextInput
-          style={styles.numberInput}
-          maxLength={2}
-          keyboardType="number-pad"
-          autoCapitalize="none"
-          autoCorrect={false}
-          value={textInputValue}
-          onChangeText={textInputValueChange}
-        />
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainerOnly}>
-            <PrimaryButton onPress={resetButton}>Reset</PrimaryButton>
-          </View>
-          <View style={styles.buttonContainerOnly}>
-            <PrimaryButton onPress={confirmButton}>Confirm</PrimaryButton>
-          </View>
+    <ScrollView>
+      <KeyboardAvoidingView style={styles.screen} behavior="position">
+        <View style={rootContainerStyle}>
+          <Title>Guess My Number</Title>
+          <Card>
+            <InstructionText>Enter a number</InstructionText>
+            <TextInput
+              style={styles.numberInput}
+              maxLength={2}
+              keyboardType="number-pad"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={textInputValue}
+              onChangeText={textInputValueChange}
+            />
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonContainerOnly}>
+                <PrimaryButton onPress={resetButton}>Reset</PrimaryButton>
+              </View>
+              <View style={styles.buttonContainerOnly}>
+                <PrimaryButton onPress={confirmButton}>Confirm</PrimaryButton>
+              </View>
+            </View>
+          </Card>
         </View>
-      </Card>
-    </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   rootContainer: {
     flex: 1,
     alignItems: "center",

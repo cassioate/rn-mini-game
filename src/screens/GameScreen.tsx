@@ -1,4 +1,11 @@
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
 import { useEffect, useState } from "react";
@@ -38,6 +45,7 @@ export default function GameScreen({ userNumber, gameOverHandler }: Props) {
   );
   const [currentGuesse, setCurrentGuesse] = useState<number>(initialGuess);
   const [guessRounds, setGuessRounds] = useState([initialGuess]);
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (userNumber === currentGuesse) {
@@ -78,9 +86,8 @@ export default function GameScreen({ userNumber, gameOverHandler }: Props) {
 
   const guessRoundsListLength = guessRounds.length;
 
-  return (
-    <View style={styles.screen}>
-      <Title> Opponent's guess </Title>
+  let content = (
+    <>
       <NumberContainer>{currentGuesse}</NumberContainer>
       <Card>
         <InstructionText style={styles.instructionText}>
@@ -99,6 +106,33 @@ export default function GameScreen({ userNumber, gameOverHandler }: Props) {
           </View>
         </View>
       </Card>
+    </>
+  );
+
+  if (width > 500) {
+    content = (
+      <>
+        <View style={styles.buttonsContainerWidth500}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuesseHandler("lower")}>
+              -
+            </PrimaryButton>
+          </View>
+          <NumberContainer>{currentGuesse}</NumberContainer>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuesseHandler("greater")}>
+              +
+            </PrimaryButton>
+          </View>
+        </View>
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <Title> Opponent's guess </Title>
+      {content}
       <View style={styles.listContainer}>
         {/* {guessRounds.map(guessRound => <Text key={guessRound}>{guessRound}</Text>)} */}
         <FlatList
@@ -133,5 +167,9 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     padding: 16,
+  },
+  buttonsContainerWidth500: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
