@@ -60,16 +60,13 @@ export default function GameScreen({ userNumber, gameOverHandler }: Props) {
     }
 
     if (direction === "lower") {
-      console.log("LOWER");
       maxBoundary = currentGuesse;
       // setMaxBoundary(currentGuesse);
     } else {
-      console.log("GREATER");
       minBoundary = currentGuesse;
       // setMinBoundary(currentGuesse);
     }
 
-    console.log(minBoundary, maxBoundary, userNumber, currentGuesse, direction);
     const newRandom = generateRandomBetween(
       minBoundary,
       maxBoundary,
