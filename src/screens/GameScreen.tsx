@@ -7,12 +7,12 @@ import {
   View,
 } from "react-native";
 import PrimaryButton from "../components/ui/PrimaryButton";
-import Title from "../components/ui/Title";
 import { useEffect, useState } from "react";
 import NumberContainer from "../components/game/NumberContainer";
 import Card from "../components/ui/Card";
 import InstructionText from "../components/ui/InstructionText";
 import GuessLogItem from "../components/game/GuessLogItem";
+import Title from "../components/ui/Title";
 
 interface Props {
   userNumber: number;
